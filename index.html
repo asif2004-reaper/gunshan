@@ -1,9 +1,11 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <meta name="theme-color" content="#9864ff">
     <title>Happy Birthday, partner! 🎂</title>
 
     <style>
@@ -123,9 +125,7 @@
         }
 
         @keyframes bounce {
-
-            0%,
-            100% {
+            0%, 100% {
                 transform: translateY(0) rotate(-4deg);
             }
 
@@ -209,6 +209,11 @@
             box-shadow: 0 2px 0 #d3a6ff;
         }
 
+        button:disabled {
+            cursor: default;
+            opacity: 1;
+        }
+
         #surprise {
             display: none;
             margin-top: 20px;
@@ -233,29 +238,6 @@
             letter-spacing: 2px;
             margin-top: 20px;
             color: white;
-        }
-
-        .balloon {
-            position: fixed;
-            bottom: -100px;
-            font-size: 38px;
-            z-index: 1;
-            pointer-events: none;
-            animation: floatUp linear infinite;
-        }
-
-        @keyframes floatUp {
-            0% {
-                transform: translateY(0) rotate(-8deg);
-            }
-
-            50% {
-                transform: translateY(-55vh) rotate(8deg);
-            }
-
-            100% {
-                transform: translateY(-115vh) rotate(-8deg);
-            }
         }
 
         @media (max-height: 720px) {
@@ -298,12 +280,12 @@
         }
 
         @media (prefers-reduced-motion: reduce) {
-
             *,
             *::before,
             *::after {
                 animation-duration: .01ms !important;
                 animation-iteration-count: 1 !important;
+                scroll-behavior: auto !important;
             }
         }
     </style>
@@ -314,14 +296,17 @@
     <div class="background-shape shape1"></div>
     <div class="background-shape shape2"></div>
 
-    <audio id="birthdayMusic" autoplay loop>
+    <!-- Birthday Music -->
+    <audio id="birthdayMusic" autoplay loop preload="auto">
         <source src="bdy.mp3" type="audio/mpeg">
+        Your browser does not support audio playback.
     </audio>
 
     <canvas id="confetti"></canvas>
 
     <main class="card">
-        <div class="top-label">A Little Somthing From Me</div>
+
+        <div class="top-label">A Little Something From Me</div>
 
         <div class="cake">🎂</div>
 
@@ -332,9 +317,10 @@
         <div class="stars">✨ 🧁 ✨</div>
 
         <p class="message">
-            To my little caremel! 🥳<br>
+            To my little caramel! 🥳<br>
             Another year older, another year of being
             <strong>absolutely iconic!</strong><br><br>
+
             May your days be filled with laughter,
             your dreams come true, and your life be
             as colorful as this little birthday surprise! 💕
@@ -342,66 +328,87 @@
 
         <div class="gift">🎁 🎈 🧸</div>
 
-        <button id="surpriseButton" onclick="openSurprise()">
+        <button id="surpriseButton" type="button">
             🎊 TAP FOR A SURPRISE!
         </button>
 
         <section id="surprise">
+
             <h2>💗 A Small Note for You 💗</h2>
+
             Happy Birthday, Gunshan! 🥹💕<br><br>
+
             Thank you for being the kind of person
             who makes ordinary moments unforgettable.
             I hope this year brings you endless smiles,
             beautiful memories, and all the happiness
             you deserve.<br><br>
+
             No matter how old we get, let's always
             stay silly, laugh at the dumbest things,
             and make more crazy memories together! 🫶<br><br>
+
             <strong>You're one of a kind. Never forget that! 🌷</strong>
-            <div style="font-size:30px; margin-top:10px">🎂💖🥳</div>
+
+            <div style="font-size:30px; margin-top:10px">
+                🎂💖🥳
+            </div>
+
         </section>
 
-        <div class="footer">YOUR DAY • YOUR MAGIC • YOUR MOMENT 💫</div>
+        <div class="footer">
+            YOUR DAY • YOUR MAGIC • YOUR MOMENT 💫
+        </div>
+
     </main>
 
     <script>
 
+        // =====================================
+        // 1. BIRTHDAY MUSIC
+        // =====================================
+
         const music = document.getElementById("birthdayMusic");
 
-music.volume = 0.25;
+        music.volume = 0.25;
 
-document.addEventListener("click", () => {
-    if (music.paused) {
-        music.play().catch(console.error);
-    }
-}, { once: true });
-
-window.addEventListener("load", () => {
-    music.play().catch(() => {
-        // Wait for the user's first interaction.
-    });
-});
-
-        document.addEventListener("click", () => {
+        // Attempt autoplay when page loads
+        function playMusic() {
             if (music.paused) {
-                music.play().catch(() => { });
+                music.play().catch(() => {
+                    // Browser may block autoplay.
+                    // Music will start after user interaction.
+                });
             }
-        }, { once: true });
+        }
+
+        window.addEventListener("load", playMusic);
+
+        // Start music after the first user interaction
+        document.addEventListener("click", playMusic, {
+            once: true
+        });
+
+        // =====================================
+        // 2. CONFETTI CANVAS
+        // =====================================
 
         const canvas = document.getElementById("confetti");
         const ctx = canvas.getContext("2d");
 
         let W, H;
         let particles = [];
-        let animationId;
 
         function resizeCanvas() {
+
             const dpr = Math.min(window.devicePixelRatio || 1, 2);
+
             W = window.innerWidth;
             H = window.innerHeight;
 
             canvas.width = W * dpr;
             canvas.height = H * dpr;
+
             canvas.style.width = W + "px";
             canvas.style.height = H + "px";
 
@@ -409,87 +416,144 @@ window.addEventListener("load", () => {
         }
 
         window.addEventListener("resize", resizeCanvas);
+
         resizeCanvas();
 
         const colors = [
-            "#ff4fa3", "#ffe66d", "#65e7ff",
-            "#a78bfa", "#ffffff", "#ff895d", "#8affc1"
+            "#ff4fa3",
+            "#ffe66d",
+            "#65e7ff",
+            "#a78bfa",
+            "#ffffff",
+            "#ff895d",
+            "#8affc1"
         ];
 
+        // Generate confetti burst
         function burst(x = W / 2, y = H / 2, amount = 130) {
+
             for (let i = 0; i < amount; i++) {
+
                 const angle = Math.random() * Math.PI * 2;
                 const speed = 2 + Math.random() * 7;
 
                 particles.push({
-                    x, y,
+
+                    x: x,
+                    y: y,
+
                     vx: Math.cos(angle) * speed,
                     vy: Math.sin(angle) * speed - 2,
+
                     size: 3 + Math.random() * 5,
+
                     rotation: Math.random() * 6,
                     spin: (Math.random() - .5) * .2,
-                    color: colors[Math.floor(Math.random() * colors.length)],
+
+                    color: colors[
+                        Math.floor(Math.random() * colors.length)
+                    ],
+
                     life: 90 + Math.random() * 50
+
                 });
             }
         }
 
+        // Animate confetti
         function animate() {
+
             ctx.clearRect(0, 0, W, H);
 
             particles = particles.filter(p => p.life > 0);
 
             for (const p of particles) {
+
                 p.x += p.vx;
                 p.y += p.vy;
+
                 p.vy += .10;
                 p.vx *= .99;
+
                 p.rotation += p.spin;
                 p.life--;
 
                 ctx.save();
+
                 ctx.translate(p.x, p.y);
                 ctx.rotate(p.rotation);
+
                 ctx.globalAlpha = Math.min(1, p.life / 25);
+
                 ctx.fillStyle = p.color;
-                ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size * 1.5);
+
+                ctx.fillRect(
+                    -p.size / 2,
+                    -p.size / 2,
+                    p.size,
+                    p.size * 1.5
+                );
+
                 ctx.restore();
             }
 
             ctx.globalAlpha = 1;
-            animationId = requestAnimationFrame(animate);
+
+            requestAnimationFrame(animate);
         }
 
         animate();
 
+        // =====================================
+        // 3. INITIAL CELEBRATION
+        // =====================================
 
-        // Initial celebration
         for (let i = 0; i < 3; i++) {
+
             setTimeout(() => {
-                burst(Math.random() * W, Math.random() * H * .6, 45);
+
+                burst(
+                    Math.random() * W,
+                    Math.random() * H * .6,
+                    45
+                );
+
             }, i * 500);
         }
 
+        // =====================================
+        // 4. SURPRISE BUTTON
+        // =====================================
+
+        const surprise = document.getElementById("surprise");
+        const button = document.getElementById("surpriseButton");
+
         function openSurprise() {
-            const surprise = document.getElementById("surprise");
-            const button = document.getElementById("surpriseButton");
 
             surprise.style.display = "block";
+
             button.textContent = "💖 HAPPY BIRTHDAY GUNSHAN! 💖";
+
             button.disabled = true;
 
+            // Three celebration bursts
             burst(W * .25, H * .35, 150);
             burst(W * .75, H * .35, 150);
             burst(W * .5, H * .25, 180);
 
-            // Keep the surprise visible on shorter mobile screens.
+            // Scroll to the surprise message
             setTimeout(() => {
+
                 surprise.scrollIntoView({
                     behavior: "smooth",
                     block: "nearest"
                 });
+
             }, 100);
         }
+
+        button.addEventListener("click", openSurprise);
+
     </script>
 
 </body>
